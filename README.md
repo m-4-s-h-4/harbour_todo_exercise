@@ -4,12 +4,20 @@
 
 Preferably in the following order:
 
-- Swap you own email for mine on `src/constants/email.ts`
-- Query: Fetch a single TODO list
+- ~~Swap you own email for mine on `src/constants/email.ts`~~
+- ~~Query: Fetch a single TODO list~~
 - Mutation: Delete a list
-- Mutation: Add a TODO
-- Mutation: Delete a TODO
-- Mutation: Update a TODO, i.e. set as finished
+
+delete list doesnt work but when testing says true just doesnt delete
+ {
+   "data": {
+     "deleteList": true
+   }
+ }
+
+- ~~Mutation: Add a TODO~~
+- ~~Mutation: Delete a TODO~~
+- ~~Mutation: Update a TODO, i.e. set as finished~~
 
 ## Bonus (extra 1%)
 

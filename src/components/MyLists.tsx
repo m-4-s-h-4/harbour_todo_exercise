@@ -1,10 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import classNames from 'classnames';
 import { CreateList } from '@/components/CreateList';
 import { randomColor } from '@/utils/randomColor';
-import { useState } from 'react';
+import { gql } from 'graphql-request';
+import { client } from '@/lib/client';
 
 export type TodoList = {
   id: number;
@@ -17,6 +19,12 @@ type MyListsProps = {
   list: TodoList[];
 };
 
+const DELETE_LIST_MUTATION = gql`
+  mutation DeleteList($deleteListId: Int!) {
+    deleteList(id: $deleteListId)
+  }
+`;
+
 export const MyLists = ({ list = [] }: MyListsProps) => {
   const [todoLists, setTodoLists] = useState<TodoList[]>(list);
 
@@ -24,9 +32,12 @@ export const MyLists = ({ list = [] }: MyListsProps) => {
     setTodoLists([...todoLists, newTodoList]);
   };
 
-  const onDeletedHandler = (id: string) => {
-    // TODO: delete list with query
-    // Update state with new list
+  const onDeleteHandler = async (id: number) => {
+    await client.request<{ deleteList: TodoList }>(DELETE_LIST_MUTATION, {
+      deleteListId: id,
+    });
+    const newTodoLists = todoLists.filter((todoList) => todoList.id !== id);
+    setTodoLists(newTodoLists);
   };
 
   return (
@@ -44,6 +55,7 @@ export const MyLists = ({ list = [] }: MyListsProps) => {
             >
               {item.name}
             </Link>
+            <button className="btn btn-square btn-error" onClick={() => onDeleteHandler(item.id)}>X</button>
           </li>
         ))}
       </ul>
